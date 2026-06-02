@@ -1,0 +1,43 @@
+@model LoginViewModel
+@{
+    ViewData["Title"] = "Вход";
+}
+
+<div class="row justify-content-center">
+    <div class="col-md-5">
+        <h1 class="mb-3">Вход</h1>
+        <form asp-action="Login" method="post">
+            <div asp-validation-summary="All" class="text-danger"></div>
+            <div class="mb-2">
+                <label asp-for="Email" class="form-label"></label>
+                <input asp-for="Email" class="form-control" />
+                <span asp-validation-for="Email" class="text-danger"></span>
+            </div>
+            <div class="mb-2">
+                <label asp-for="Password" class="form-label"></label>
+                <input asp-for="Password" class="form-control" />
+                <span asp-validation-for="Password" class="text-danger"></span>
+            </div>
+            <div class="form-check mb-3">
+                <input asp-for="RememberMe" class="form-check-input" />
+                <label asp-for="RememberMe" class="form-check-label"></label>
+            </div>
+            <button type="submit" class="btn btn-primary w-100">Влез</button>
+        </form>
+
+        <div class="alert alert-secondary mt-3 small">
+            <strong>Демо профили за защитата:</strong><br />
+            👑 Админ: admin@events.bg / Admin123!<br />
+            🎤 Организатор: organizer@events.bg / Organizer123!<br />
+            🙂 Потребител: user@events.bg / User123!
+        </div>
+
+        <p class="text-center">
+            Нямате профил? <a asp-action="Register">Регистрирайте се</a>
+        </p>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
