@@ -1,0 +1,45 @@
+@model IEnumerable<Event>
+@{
+    ViewData["Title"] = "Начало";
+}
+
+<div class="p-5 mb-4 bg-dark text-white rounded-3 text-center">
+    <h1 class="display-5 fw-bold">Открий и резервирай своето събитие 🎉</h1>
+    <p class="fs-5">Концерти, спорт и конференции — всичко на едно място.</p>
+    <a class="btn btn-primary btn-lg" asp-controller="Events" asp-action="Index">Разгледай всички събития</a>
+</div>
+
+<h2 class="mb-3">Предстоящи събития</h2>
+
+@if (!Model.Any())
+{
+    <p class="text-muted">Все още няма предстоящи събития.</p>
+}
+else
+{
+    <div class="row row-cols-1 row-cols-md-3 g-4">
+        @foreach (var ev in Model)
+        {
+            <div class="col">
+                <div class="card h-100 shadow-sm">
+                    @if (!string.IsNullOrEmpty(ev.ImageUrl))
+                    {
+                        <img src="@ev.ImageUrl" class="card-img-top" style="height:180px;object-fit:cover" alt="@ev.Title">
+                    }
+                    <div class="card-body">
+                        <span class="badge bg-secondary mb-2">@ev.Category?.Name</span>
+                        <h5 class="card-title">@ev.Title</h5>
+                        <p class="card-text text-muted small">
+                            📍 @ev.Location<br />
+                            🗓️ @ev.StartDate.ToString("dd.MM.yyyy HH:mm")
+                        </p>
+                        <p class="fw-bold">@ev.Price.ToString("0.00") лв.</p>
+                    </div>
+                    <div class="card-footer bg-white border-0">
+                        <a class="btn btn-outline-primary w-100" asp-controller="Events" asp-action="Details" asp-route-id="@ev.Id">Детайли</a>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+}
