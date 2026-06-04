@@ -1,0 +1,68 @@
+@model IEnumerable<Event>
+@{
+    ViewData["Title"] = "Събития";
+    var categories = ViewBag.Categories as Microsoft.AspNetCore.Mvc.Rendering.SelectList;
+}
+
+<h1 class="mb-3">Всички събития</h1>
+
+@* Форма за търсене и филтриране (GET, за да остане в URL-а). *@
+<form method="get" class="row g-2 mb-4">
+    <div class="col-md-6">
+        <input type="text" name="search" value="@ViewBag.Search" class="form-control" placeholder="Търси по заглавие или място..." />
+    </div>
+    <div class="col-md-4">
+        <select name="categoryId" class="form-select" asp-items="categories">
+            <option value="">-- Всички категории --</option>
+        </select>
+    </div>
+    <div class="col-md-2">
+        <button type="submit" class="btn btn-primary w-100">Търси</button>
+    </div>
+</form>
+
+@if (!Model.Any())
+{
+    <div class="alert alert-info">Няма намерени събития.</div>
+}
+else
+{
+    <table class="table table-hover align-middle">
+        <thead>
+            <tr>
+                <th>Заглавие</th>
+                <th>Категория</th>
+                <th>Място</th>
+                <th>Дата</th>
+                <th>Цена</th>
+                <th>Места</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var ev in Model)
+            {
+                <tr>
+                    <td>@ev.Title</td>
+                    <td><span class="badge bg-secondary">@ev.Category?.Name</span></td>
+                    <td>@ev.Location</td>
+                    <td>@ev.StartDate.ToString("dd.MM.yyyy HH:mm")</td>
+                    <td>@ev.Price.ToString("0.00") лв.</td>
+                    <td>
+                        @if (ev.IsSoldOut)
+                        {
+                            <span class="badge bg-danger">Разпродадено</span>
+                        }
+                        else
+                        {
+                            <span class="badge bg-success">@ev.AvailableSeats свободни</span>
+                        }
+                    </td>
+                    <td>
+                        <a class="btn btn-sm btn-outline-primary" asp-action="Details" asp-route-id="@ev.Id">Виж</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}

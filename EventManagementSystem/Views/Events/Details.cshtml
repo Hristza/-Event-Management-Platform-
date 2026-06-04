@@ -1,0 +1,76 @@
+@model Event
+@{
+    ViewData["Title"] = Model.Title;
+    var isOwnerOrAdmin = User.IsInRole("Admin") ||
+        (UserManager.GetUserId(User) == Model.OrganizerId);
+}
+
+<div class="row">
+    <div class="col-md-7">
+        @if (!string.IsNullOrEmpty(Model.ImageUrl))
+        {
+            <img src="@Model.ImageUrl" class="img-fluid rounded mb-3" alt="@Model.Title" />
+        }
+        <h1>@Model.Title</h1>
+        <span class="badge bg-secondary mb-3">@Model.Category?.Name</span>
+        <p>@Model.Description</p>
+        <ul class="list-group mb-3">
+            <li class="list-group-item">📍 <strong>Място:</strong> @Model.Location</li>
+            <li class="list-group-item">🗓️ <strong>Начало:</strong> @Model.StartDate.ToString("dd.MM.yyyy HH:mm")</li>
+            <li class="list-group-item">🏁 <strong>Край:</strong> @Model.EndDate.ToString("dd.MM.yyyy HH:mm")</li>
+            <li class="list-group-item">👤 <strong>Организатор:</strong> @Model.Organizer?.FullName</li>
+            <li class="list-group-item">💺 <strong>Свободни места:</strong> @Model.AvailableSeats от @Model.Capacity</li>
+        </ul>
+    </div>
+
+    <div class="col-md-5">
+        <div class="card shadow-sm">
+            <div class="card-body text-center">
+                <h3 class="card-title">@Model.Price.ToString("0.00") лв.</h3>
+                @if (Model.IsSoldOut)
+                {
+                    <p class="text-danger fw-bold">Разпродадено</p>
+                }
+                else if (!Model.IsUpcoming)
+                {
+                    <p class="text-muted">Това събитие вече е минало.</p>
+                }
+                else if (SignInManager.IsSignedIn(User))
+                {
+                    <a class="btn btn-success btn-lg w-100" asp-controller="Tickets" asp-action="Buy" asp-route-eventId="@Model.Id">Купи билет</a>
+                }
+                else
+                {
+                    <a class="btn btn-outline-success w-100" asp-controller="Account" asp-action="Login">Влез, за да купиш билет</a>
+                }
+
+                @if (isOwnerOrAdmin)
+                {
+                    <hr />
+                    <a class="btn btn-warning w-100 mb-2" asp-action="Edit" asp-route-id="@Model.Id">Редактирай</a>
+                    <a class="btn btn-danger w-100" asp-action="Delete" asp-route-id="@Model.Id">Изтрий</a>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+<hr />
+<h4>Мнения (@Model.Reviews.Count)</h4>
+@if (!Model.Reviews.Any())
+{
+    <p class="text-muted">Все още няма мнения за това събитие.</p>
+}
+else
+{
+    foreach (var r in Model.Reviews)
+    {
+        <div class="border rounded p-2 mb-2">
+            <strong>@r.User?.FullName</strong>
+            <span class="text-warning">@(new string('★', r.Rating))</span>
+            <p class="mb-0">@r.Comment</p>
+        </div>
+    }
+}
+
+<a class="btn btn-link" asp-action="Index">&larr; Назад към събитията</a>
