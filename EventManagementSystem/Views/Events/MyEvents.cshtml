@@ -1,0 +1,42 @@
+@model IEnumerable<Event>
+@{
+    ViewData["Title"] = "Моите събития";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h1>Моите събития</h1>
+    <a class="btn btn-success" asp-action="Create">+ Ново събитие</a>
+</div>
+
+@if (!Model.Any())
+{
+    <div class="alert alert-info">Все още нямате създадени събития. Натиснете „Ново събитие“.</div>
+}
+else
+{
+    <table class="table table-striped align-middle">
+        <thead>
+            <tr>
+                <th>Заглавие</th>
+                <th>Дата</th>
+                <th>Продадени / Капацитет</th>
+                <th>Действия</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var ev in Model)
+            {
+                <tr>
+                    <td>@ev.Title</td>
+                    <td>@ev.StartDate.ToString("dd.MM.yyyy HH:mm")</td>
+                    <td>@ev.TicketsSold / @ev.Capacity</td>
+                    <td>
+                        <a class="btn btn-sm btn-outline-secondary" asp-action="Details" asp-route-id="@ev.Id">Виж</a>
+                        <a class="btn btn-sm btn-outline-warning" asp-action="Edit" asp-route-id="@ev.Id">Редактирай</a>
+                        <a class="btn btn-sm btn-outline-danger" asp-action="Delete" asp-route-id="@ev.Id">Изтрий</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}

@@ -1,0 +1,22 @@
+@model Event
+@{
+    ViewData["Title"] = "Изтриване";
+}
+
+<h1 class="text-danger">Изтриване на събитие</h1>
+<p class="lead">Сигурни ли сте, че искате да изтриете това събитие?</p>
+
+<div class="card mb-3">
+    <div class="card-body">
+        <h5>@Model.Title</h5>
+        <p class="text-muted mb-1">📍 @Model.Location</p>
+        <p class="text-muted mb-1">🗓️ @Model.StartDate.ToString("dd.MM.yyyy HH:mm")</p>
+        <p class="mb-0">Продадени билети: @Model.TicketsSold</p>
+    </div>
+</div>
+
+<form asp-action="Delete" method="post">
+    <input type="hidden" asp-for="Id" />
+    <button type="submit" class="btn btn-danger">Да, изтрий</button>
+    <a class="btn btn-secondary" asp-action="MyEvents">Отказ</a>
+</form>
