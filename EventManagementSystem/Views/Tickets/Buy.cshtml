@@ -1,0 +1,40 @@
+@model PurchaseTicketViewModel
+@{
+    ViewData["Title"] = "Купуване на билет";
+}
+
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <h1 class="mb-3">Купуване на билет</h1>
+        <div class="card">
+            <div class="card-body">
+                <h5>@Model.EventTitle</h5>
+                <p class="text-muted">
+                    Цена за билет: <strong>@Model.Price.ToString("0.00") лв.</strong><br />
+                    Свободни места: <strong>@Model.AvailableSeats</strong>
+                </p>
+
+                <form asp-action="Buy" method="post">
+                    <div asp-validation-summary="All" class="text-danger"></div>
+                    <input type="hidden" asp-for="EventId" />
+                    <input type="hidden" asp-for="EventTitle" />
+                    <input type="hidden" asp-for="Price" />
+                    <input type="hidden" asp-for="AvailableSeats" />
+
+                    <div class="mb-3">
+                        <label asp-for="Quantity" class="form-label"></label>
+                        <input asp-for="Quantity" class="form-control" />
+                        <span asp-validation-for="Quantity" class="text-danger"></span>
+                    </div>
+
+                    <button type="submit" class="btn btn-success w-100">Потвърди покупката</button>
+                    <a class="btn btn-link w-100" asp-controller="Events" asp-action="Details" asp-route-id="@Model.EventId">Отказ</a>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

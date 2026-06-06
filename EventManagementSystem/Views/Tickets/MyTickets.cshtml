@@ -1,0 +1,53 @@
+@model IEnumerable<Ticket>
+@{
+    ViewData["Title"] = "Моите билети";
+}
+
+<h1 class="mb-3">Моите билети</h1>
+
+@if (!Model.Any())
+{
+    <div class="alert alert-info">
+        Все още нямате билети. <a asp-controller="Events" asp-action="Index">Разгледайте събитията</a>.
+    </div>
+}
+else
+{
+    <table class="table align-middle">
+        <thead>
+            <tr>
+                <th>Събитие</th>
+                <th>Дата</th>
+                <th>Брой</th>
+                <th>Сума</th>
+                <th>Код</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var t in Model)
+            {
+                <tr>
+                    <td>@t.Event?.Title</td>
+                    <td>@t.Event?.StartDate.ToString("dd.MM.yyyy HH:mm")</td>
+                    <td>@t.Quantity</td>
+                    <td>@t.TotalPrice.ToString("0.00") лв.</td>
+                    <td><code>@t.TicketCode</code></td>
+                    <td>
+                        @if (t.Event != null && t.Event.StartDate > DateTime.UtcNow)
+                        {
+                            <form asp-action="Cancel" asp-route-id="@t.Id" method="post"
+                                  onsubmit="return confirm('Сигурни ли сте, че искате да върнете билета?');">
+                                <button type="submit" class="btn btn-sm btn-outline-danger">Върни</button>
+                            </form>
+                        }
+                        else
+                        {
+                            <span class="text-muted">—</span>
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
