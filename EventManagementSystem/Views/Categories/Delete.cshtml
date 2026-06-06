@@ -1,0 +1,20 @@
+@model Category
+@{
+    ViewData["Title"] = "Изтриване на категория";
+}
+
+<h1 class="text-danger">Изтриване на категория</h1>
+<p class="lead">Сигурни ли сте? Категория с налични събития НЕ може да бъде изтрита.</p>
+
+<div class="card mb-3">
+    <div class="card-body">
+        <h5>@Model.Name</h5>
+        <p class="mb-0 text-muted">@Model.Description</p>
+    </div>
+</div>
+
+<form asp-action="Delete" method="post">
+    <input type="hidden" asp-for="Id" />
+    <button type="submit" class="btn btn-danger">Да, изтрий</button>
+    <a class="btn btn-secondary" asp-action="Index">Отказ</a>
+</form>
