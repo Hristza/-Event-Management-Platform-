@@ -1,0 +1,39 @@
+@model AdminDashboardViewModel
+@{
+    ViewData["Title"] = "Админ панел";
+}
+
+<h1 class="mb-4">Административно табло</h1>
+
+<div class="row row-cols-1 row-cols-md-3 g-3">
+    <div class="col">
+        <div class="card text-bg-primary"><div class="card-body">
+            <h6>Събития</h6><h2>@Model.TotalEvents</h2>
+        </div></div>
+    </div>
+    <div class="col">
+        <div class="card text-bg-success"><div class="card-body">
+            <h6>Потребители</h6><h2>@Model.TotalUsers</h2>
+        </div></div>
+    </div>
+    <div class="col">
+        <div class="card text-bg-secondary"><div class="card-body">
+            <h6>Категории</h6><h2>@Model.TotalCategories</h2>
+        </div></div>
+    </div>
+    <div class="col">
+        <div class="card text-bg-warning"><div class="card-body">
+            <h6>Продадени билети</h6><h2>@Model.TotalTicketsSold</h2>
+        </div></div>
+    </div>
+    <div class="col">
+        <div class="card text-bg-dark"><div class="card-body">
+            <h6>Приходи</h6><h2>@Model.TotalRevenue.ToString("0.00") лв.</h2>
+        </div></div>
+    </div>
+</div>
+
+<div class="mt-4">
+    <a class="btn btn-outline-primary" asp-action="Users">Управление на потребители</a>
+    <a class="btn btn-outline-secondary" asp-controller="Categories" asp-action="Index">Управление на категории</a>
+</div>
