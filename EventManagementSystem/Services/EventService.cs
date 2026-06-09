@@ -15,7 +15,7 @@ namespace EventManagementSystem.Services
             _context = context;
         }
 
-        public async Task<IEnumerable<Event>> GetAllAsync(string? search = null, int? categoryId = null)
+        public async Task<IEnumerable<Event>> GetAllAsync(string? search = null, int? categoryId = null, bool includePast = false)
         {
             // IQueryable ни позволява да "сглобим" заявката стъпка по стъпка,
             // и чак накрая EF Core я превръща в един SQL към базата.
@@ -23,6 +23,14 @@ namespace EventManagementSystem.Services
                 .Include(e => e.Category)
                 .Include(e => e.Organizer)
                 .Include(e => e.Tickets);
+
+            // По подразбиране показваме само ПРЕДСТОЯЩИТЕ събития, за да не
+            // се "замърсява" каталогът с минали. Същото правило като IsUpcoming.
+            if (!includePast)
+            {
+                var now = DateTime.UtcNow;
+                query = query.Where(e => e.StartDate > now);
+            }
 
             // Филтър по текст в заглавието или мястото.
             if (!string.IsNullOrWhiteSpace(search))

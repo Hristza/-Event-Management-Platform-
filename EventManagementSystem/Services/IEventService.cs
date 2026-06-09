@@ -5,7 +5,8 @@ namespace EventManagementSystem.Services
     public interface IEventService
     {
         // Списък с филтър по търсене и категория (за началната страница и каталога).
-        Task<IEnumerable<Event>> GetAllAsync(string? search = null, int? categoryId = null);
+        // includePast=false => само предстоящи събития; true => и миналите (архив).
+        Task<IEnumerable<Event>> GetAllAsync(string? search = null, int? categoryId = null, bool includePast = false);
 
         // Само предстоящите събития (за началната страница).
         Task<IEnumerable<Event>> GetUpcomingAsync(int count = 6);

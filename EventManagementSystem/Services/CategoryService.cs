@@ -16,9 +16,12 @@ namespace EventManagementSystem.Services
         }
 
         // Връща всички категории, подредени по име.
+        // Include зарежда и свързаните събития, за да можем да покажем
+        // "Брой събития" в списъка (иначе c.Events.Count винаги е 0).
         public async Task<IEnumerable<Category>> GetAllAsync()
         {
             return await _context.Categories
+                .Include(c => c.Events)
                 .OrderBy(c => c.Name)
                 .ToListAsync();
         }

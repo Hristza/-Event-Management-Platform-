@@ -29,11 +29,12 @@ namespace EventManagementSystem.Controllers
 
         // READ: каталог с всички събития + търсене и филтър. Достъпно за всички.
         [AllowAnonymous]
-        public async Task<IActionResult> Index(string? search, int? categoryId)
+        public async Task<IActionResult> Index(string? search, int? categoryId, bool includePast = false)
         {
-            var events = await _eventService.GetAllAsync(search, categoryId);
+            var events = await _eventService.GetAllAsync(search, categoryId, includePast);
             ViewBag.Categories = await BuildCategorySelectList(categoryId);
             ViewBag.Search = search;
+            ViewBag.IncludePast = includePast;
             return View(events);
         }
 
