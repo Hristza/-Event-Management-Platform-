@@ -48,6 +48,20 @@ namespace EventManagementSystem.Models.ViewModels
         public int CategoryId { get; set; }
     }
 
+    // Форма за добавяне на мнение (ревю) към събитие.
+    public class ReviewFormViewModel
+    {
+        public int EventId { get; set; }
+
+        [Range(1, 5, ErrorMessage = "Оценката е между 1 и 5.")]
+        [Display(Name = "Оценка")]
+        public int Rating { get; set; } = 5;
+
+        [MaxLength(500)]
+        [Display(Name = "Коментар")]
+        public string? Comment { get; set; }
+    }
+
     // Данни за формата при купуване на билет.
     public class PurchaseTicketViewModel
     {

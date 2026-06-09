@@ -23,5 +23,9 @@ namespace EventManagementSystem.Services
 
         // Проверка дали даден потребител е собственик/организатор на събитие.
         Task<bool> IsOwnerAsync(int eventId, string userId);
+
+        // Добавя мнение/оценка за събитие. Връща false, ако събитието не
+        // съществува или потребителят вече е оставил мнение за него.
+        Task<bool> AddReviewAsync(Review review);
     }
 }

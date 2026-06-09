@@ -186,6 +186,35 @@ namespace EventManagementSystem.Controllers
             return RedirectToAction(nameof(MyEvents));
         }
 
+        // CREATE (POST): добавя мнение/оценка за събитие.
+        // [Authorize] без роли => всеки ВЛЯЗЪЛ потребител може да коментира.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize]
+        public async Task<IActionResult> AddReview(ReviewFormViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                TempData["Error"] = "Оценката трябва да е между 1 и 5 звезди.";
+                return RedirectToAction(nameof(Details), new { id = model.EventId });
+            }
+
+            var review = new Review
+            {
+                EventId = model.EventId,
+                UserId = _userManager.GetUserId(User)!,
+                Rating = model.Rating,
+                Comment = model.Comment
+            };
+
+            var added = await _eventService.AddReviewAsync(review);
+            TempData[added ? "Success" : "Error"] = added
+                ? "Благодарим за мнението!"
+                : "Вече сте оставили мнение за това събитие.";
+
+            return RedirectToAction(nameof(Details), new { id = model.EventId });
+        }
+
         // ----- Помощни (private) методи -----
 
         // Админът може всичко; организаторът - само своите събития.

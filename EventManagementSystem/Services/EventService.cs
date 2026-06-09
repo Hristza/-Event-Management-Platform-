@@ -114,5 +114,23 @@ namespace EventManagementSystem.Services
             return await _context.Events
                 .AnyAsync(e => e.Id == eventId && e.OrganizerId == userId);
         }
+
+        public async Task<bool> AddReviewAsync(Review review)
+        {
+            // Не записваме мнение за несъществуващо събитие.
+            var eventExists = await _context.Events.AnyAsync(e => e.Id == review.EventId);
+            if (!eventExists)
+                return false;
+
+            // Един потребител оставя само едно мнение за дадено събитие.
+            var alreadyReviewed = await _context.Reviews
+                .AnyAsync(r => r.EventId == review.EventId && r.UserId == review.UserId);
+            if (alreadyReviewed)
+                return false;
+
+            _context.Reviews.Add(review);
+            await _context.SaveChangesAsync();
+            return true;
+        }
     }
 }

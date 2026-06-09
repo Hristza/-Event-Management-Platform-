@@ -57,6 +57,39 @@
 
 <hr />
 <h4>Мнения (@Model.Reviews.Count)</h4>
+
+@if (SignInManager.IsSignedIn(User))
+{
+    <div class="card mb-4">
+        <div class="card-body">
+            <h6 class="card-title">Остави мнение</h6>
+            <form asp-action="AddReview" method="post">
+                <input type="hidden" name="EventId" value="@Model.Id" />
+                <div class="mb-2" style="max-width: 200px;">
+                    <label class="form-label" for="Rating">Оценка</label>
+                    <select class="form-select" id="Rating" name="Rating">
+                        <option value="5">★★★★★ (5)</option>
+                        <option value="4">★★★★ (4)</option>
+                        <option value="3">★★★ (3)</option>
+                        <option value="2">★★ (2)</option>
+                        <option value="1">★ (1)</option>
+                    </select>
+                </div>
+                <div class="mb-2">
+                    <label class="form-label" for="Comment">Коментар</label>
+                    <textarea class="form-control" id="Comment" name="Comment" rows="3"
+                              maxlength="500" placeholder="Сподели мнението си..."></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary">Публикувай</button>
+            </form>
+        </div>
+    </div>
+}
+else
+{
+    <p><a asp-controller="Account" asp-action="Login">Влез</a>, за да оставиш мнение.</p>
+}
+
 @if (!Model.Reviews.Any())
 {
     <p class="text-muted">Все още няма мнения за това събитие.</p>
